@@ -1,42 +1,27 @@
 #include <iostream>
-
 #include "Sort.h"
-
 using namespace std;
-
-void randomize(int list[], int length, int max)
-{
-    for (size_t i = 0; i < length; i++)
-    {
-        int random = rand() % (max);
-
-        list[i] = random;
-    }
-}
 
 int main()
 {
     bool runing = true;
+    bool sorted = false;
 
     Window window;
     Window *p_window = &window;
-
-    Sort sort;
-
     if (!window.Init())
     {
-        std::cout << "Error Initialiaing SDL" << std::endl;
+        cout << "Error Initialiaing SDL" << endl;
     }
 
     int list[window.WINDOW_WIDTH];
 
-    randomize(list, window.WINDOW_WIDTH, window.WINDOW_HEIGHT);
+    Sort sort(p_window, list, window.WINDOW_WIDTH, window.WINDOW_HEIGHT);
 
-    sort.p_list = list;
-    sort.p_window = &window;
+    sort.randomize();
+    window.drawNumber(list);
+    window.screenUpdate();
 
-    // sort.quickSort();
-    bool sorted = false;
     while (runing)
     {
         SDL_Event event;
@@ -49,13 +34,19 @@ int main()
             }
             if (!sorted)
             {
-                // sort.quickSort(0, 799);
-                // randomize(list, window.WINDOW_WIDTH, window.WINDOW_HEIGHT);
-                // window.screenClear();
-                // window.drawNumber(sort.p_list);
-                // window.screenUpdate();
-                // sort.bubbleSort(window.WINDOW_WIDTH);
-                sort.mergeSort(sort.p_list, 0, 799);
+                sort.quickSort();
+                sort.randomize();
+                window.screenClear();
+                window.drawNumber(list);
+                window.screenUpdate();
+                sort.bubbleSort();
+                window.drawNumber(list);
+                window.screenUpdate();
+                sort.randomize();
+                window.screenClear();
+                window.drawNumber(list);
+                window.screenUpdate();
+                sort.mergeSort();
                 sorted = true;
             }
         }

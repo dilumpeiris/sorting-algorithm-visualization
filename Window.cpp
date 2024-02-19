@@ -23,11 +23,7 @@ bool Window::Init()
     }
 
     m_buffer = new Uint32[WINDOW_HEIGHT * WINDOW_WIDTH];
-    memset(m_buffer, 1, WINDOW_HEIGHT * WINDOW_WIDTH * sizeof(Uint32));
-
-    // SDL_SetRenderDrawColor(m_renderer,
-    //                        255, 255, 255,
-    //                        255);
+    memset(m_buffer, 0, WINDOW_HEIGHT * WINDOW_WIDTH * sizeof(Uint32));
 
     screenUpdate();
 
@@ -45,7 +41,7 @@ void Window::setPixels(int x, int y, Uint8 r, Uint8 g, Uint8 b)
     color += b;
     color <<= 8;
     color += 0xFF;
-    //(WINDOW_WIDTH / 2 - y) * WINDOW_WIDTH + (WINDOW_WIDTH / 2 + x)
+
     int pixel = (y * WINDOW_WIDTH + x);
     if (m_buffer[pixel])
         m_buffer[pixel] = color;
@@ -55,17 +51,13 @@ void Window::drawNumber(int list[])
 
     for (int i = 0; i < WINDOW_WIDTH; i++)
     {
-        int r = (int)255.0 * ((double)list[i] / (double)WINDOW_HEIGHT);
-        // for (int j = (int)(((int)(WINDOW_HEIGHT - list[i]) / 2)); j < list[i] + (int)(((int)(WINDOW_HEIGHT - list[i]) / 2)); j++)
+        int r = (int)255.0 * (list[i] / (double)WINDOW_HEIGHT);
         for (int j = 0; j < list[i]; j++)
         {
 
             setPixels(i, WINDOW_HEIGHT - j, r, 255 - r, 0);
         }
     }
-    // SDL_RenderDrawLine(m_renderer,
-    //                    100, 0, 200, 0);
-    // SDL_RenderPresent(m_renderer);
 }
 void Window::screenUpdate()
 {

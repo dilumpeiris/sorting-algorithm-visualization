@@ -17,7 +17,7 @@ public:
 
     bool Init();
     void setPixels(int x, int y, Uint8 r, Uint8 g, Uint8 b);
-    void drawNumber(int list[WINDOW_WIDTH]);
+    void drawNumber(int list[]);
     void screenUpdate();
 
     void screenClear();
