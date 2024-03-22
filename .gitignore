@@ -33,5 +33,6 @@
 
 .vscode/
 main.dSYM/
+build/
 
 main
