@@ -10,7 +10,9 @@ private:
     int part(int start, int end);
     void merge(int start, int mid, int end);
 
+
 public:
+    bool sorted;
     Sort(Window *window, int *list, int len, int max);
     void randomize();
     void bubbleSort();

@@ -1,5 +1,7 @@
 #include <iostream>
-#include <SDL2/SDL.h>
+#include <SDL.h>
+// #include SDL2_SDL2_H
+// $ { SDL2_LIBRARIES }
 class Window
 {
 private:

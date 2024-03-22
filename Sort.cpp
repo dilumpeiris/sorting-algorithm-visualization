@@ -1,8 +1,14 @@
 #include <iostream>
+#include <pthread.h>
 #include "Sort.h"
+#include <mutex>
+#include <unistd.h>
+
 using namespace std;
+
 Sort::Sort(Window *window, int *list, int len, int max) : p_window(window), p_list(list), p_list_len(len), p_list_max(max)
 {
+    sorted = false;
 }
 void Sort::randomize()
 {
@@ -16,6 +22,8 @@ void Sort::randomize()
 
 void Sort::bubbleSort()
 {
+
+    // pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     int i, j;
     bool swapped;
     int skip = 0;
@@ -24,18 +32,36 @@ void Sort::bubbleSort()
         swapped = false;
         for (j = 0; j < p_list_len - i - 1; j++)
         {
+
             if (p_list[j] > p_list[j + 1])
             {
-                swap(p_list[j], p_list[j + 1]);
-                swapped = true;
-
-                if ((skip % 40) == 0)
+                if (!sorted)
                 {
-                    p_window->screenClear();
-                    p_window->drawNumber(p_list);
-                    p_window->screenUpdate();
+                    // pthread_mutex_lock(&mutex);
+                    swap(p_list[j], p_list[j + 1]);
+                    swapped = true;
+                    usleep(100);
+                    // pthread_mutex_lock(&mutex);
                 }
-                skip++;
+                else
+                {
+                    return;
+                }
+
+                // if ((skip % 40) == 0)
+                // {
+                //     if (!sorted)
+                //     {
+                //         p_window->screenClear();
+                //         p_window->drawNumber(p_list);
+                //         p_window->screenUpdate();
+                //     }
+                //     else
+                //     {
+                //         return;
+                //     }
+                // }
+                // skip++;
             }
         }
 
@@ -68,39 +94,62 @@ void Sort::merge(int start, int mid, int end)
     {
         if (list_1[l1_i] <= list_2[l2_i])
         {
-            p_list[l_i] = list_1[l1_i];
-            l1_i++;
-            p_window->screenClear();
-            p_window->drawNumber(p_list);
-            p_window->screenUpdate();
+            if (!sorted)
+            {
+                p_list[l_i] = list_1[l1_i];
+                l1_i++;
+                usleep(10000);
+            }
+            else
+            {
+                return;
+            }
         }
         else
         {
-            p_list[l_i] = list_2[l2_i];
-            l2_i++;
-            p_window->screenClear();
-            p_window->drawNumber(p_list);
-            p_window->screenUpdate();
+
+            if (!sorted)
+            {
+                p_list[l_i] = list_2[l2_i];
+                l2_i++;
+                usleep(10000);
+            }
+            else
+            {
+                return;
+            }
         }
         l_i++;
     }
     while (l1_i < l1_l)
     {
-        p_list[l_i] = list_1[l1_i];
-        l1_i++;
-        l_i++;
-        p_window->screenClear();
-        p_window->drawNumber(p_list);
-        p_window->screenUpdate();
+
+        if (!sorted)
+        {
+            p_list[l_i] = list_1[l1_i];
+            l1_i++;
+            l_i++;
+            usleep(10000);
+        }
+        else
+        {
+            return;
+        }
     }
     while (l2_i < l2_l)
     {
-        p_list[l_i] = list_2[l2_i];
-        l2_i++;
-        l_i++;
-        p_window->screenClear();
-        p_window->drawNumber(p_list);
-        p_window->screenUpdate();
+
+        if (!sorted)
+        {
+            p_list[l_i] = list_2[l2_i];
+            l2_i++;
+            l_i++;
+            usleep(10000);
+        }
+        else
+        {
+            return;
+        }
     }
 
     delete[] list_1;
